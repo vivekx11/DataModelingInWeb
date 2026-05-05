@@ -8,7 +8,7 @@ import os, io, traceback
 from pathlib import Path
 from flask import Flask, request, jsonify, send_file
 
-# Import modules
+# Import modules like analyst elt bi and sql 
 from modules import ai_analyst, etl_engine, bi_reporter, sql_engine
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
