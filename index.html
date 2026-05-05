@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Data Mining Pro — AI Analytics · ETL · BI Reports · SQL Engine</title>
+<meta name="description" content="All-in-one data mining platform: AI Data Analyst, Smart ETL Pipeline, BI Report Generator, SQL Analytics Engine"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+<link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="app-layout">
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">DM</div>
+    <span class="logo-name">Data Mining Pro</span>
+    <span class="logo-tag">4-IN-1</span>
+  </div>
+  <div class="header-right">
+    <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">by Sunny Chaurasiya</span>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-label">Modules</div>
+  <div class="sb-item active" id="nav-ai" onclick="switchModule('ai')">
+    <span class="sb-icon">🤖</span> AI Data Analyst
+  </div>
+  <div class="sb-item" id="nav-etl" onclick="switchModule('etl')">
+    <span class="sb-icon">⚡</span> Smart ETL
+  </div>
+  <div class="sb-item" id="nav-bi" onclick="switchModule('bi')">
+    <span class="sb-icon">📊</span> BI Reporter
+  </div>
+  <div class="sb-item" id="nav-sql" onclick="switchModule('sql')">
+    <span class="sb-icon">🗄</span> SQL Analytics
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-label">Info</div>
+  <div class="sb-item" style="cursor:default;font-size:9px;color:var(--muted)">
+    <span class="sb-icon">📁</span> CSV · XLSX · XLS
+  </div>
+  <div class="sb-item" style="cursor:default;font-size:9px;color:var(--muted)">
+    <span class="sb-icon">🔒</span> 500MB Max
+  </div>
+</div>
+
+<!-- MAIN CONTENT AREA -->
+<div class="main">
+
+<!-- ═══════════════════════════════════
+     MODULE 1: AI DATA ANALYST
+═══════════════════════════════════ -->
+<div class="module active" id="mod-ai">
+  <!-- Upload -->
+  <div id="ai-upload" class="upload-wrap">
+    <div class="upload-hero">
+      <div class="eyebrow">AI-Powered Analytics</div>
+      <h1>Upload. Clean.<br/>Analyze with AI.</h1>
+      <p>Auto-cleaning, Plotly visualizations, ML metrics, and Gemini AI chat — all in one click.</p>
+    </div>
+    <div class="drop-zone" id="ai-dropzone">
+      <span class="drop-icon">📁</span>
+      <h2>Drop your CSV or Excel file</h2>
+      <p>Auto-cleaning · Outlier Detection · AI Analysis</p>
+      <input type="file" id="ai-file-input" accept=".csv,.xlsx,.xls"/>
+      <div class="fmt-row"><span class="fmt-badge">CSV</span><span class="fmt-badge">XLSX</span><span class="fmt-badge">XLS</span></div>
+    </div>
+    <div class="or-divider"><span>or try demo</span></div>
+    <button class="btn btn-primary" onclick="aiUpload(demoFile())" style="padding:12px 36px">⚡ Run Demo</button>
+    <div class="features-row">
+      <div class="feat-chip"><div class="fi">🧹</div><p>Auto clean<br/>& impute</p></div>
+      <div class="feat-chip"><div class="fi">📊</div><p>6 chart<br/>types</p></div>
+      <div class="feat-chip"><div class="fi">🤖</div><p>AI chat<br/>assistant</p></div>
+    </div>
+  </div>
+  <!-- Loading -->
+  <div id="ai-loading" class="loading-wrap" style="display:none">
+    <div class="ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#1e2d45" stroke-width="5"/><circle id="ai-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#rg1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="0 327" style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .6s"/><defs><linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7c5cfc"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs></svg><div class="ring-center"><span class="ring-pct" id="ai-pct">0%</span><span class="ring-lbl">PROGRESS</span></div></div>
+    <div><div class="load-title">AI Analysis Running</div><div class="load-stage" id="ai-stage">Initializing...</div></div>
+    <div class="prog-bar"><div class="prog-fill" id="ai-bar" style="width:0%"></div></div>
+  </div>
+  <!-- Dashboard -->
+  <div id="ai-dash" class="dash" style="display:none">
+    <div class="dash-top"><div class="dash-title"><h2>🤖 AI Data Analyst</h2><p>Upload complete · Data cleaned & analyzed</p></div><div><button class="btn" onclick="showUpload('ai')">← New File</button></div></div>
+    <div class="kpi-row" id="ai-kpis"></div>
+    <div class="tabs" id="ai-tabs">
+      <button class="tab active" onclick="aiShowTab('log')">📋 Change Log</button>
+      <button class="tab" onclick="aiShowTab('viz')">📊 Visualizations</button>
+      <button class="tab" onclick="aiShowTab('acc')">🎯 ML Metrics</button>
+      <button class="tab" onclick="aiShowTab('chat')">🤖 AI Chat</button>
+    </div>
+    <div id="ai-tab-log"><div class="panel"><div class="tbl-wrap" id="ai-changelog"></div><div id="ai-downloads" style="display:none;margin-top:12px"><a href="/ai/download/csv" class="btn btn-green" style="margin-right:8px">📥 CSV</a><a href="/ai/download/excel" class="btn btn-green">📥 Excel</a></div></div></div>
+    <div id="ai-tab-viz" style="display:none"><div class="panel"><div class="ph"><span class="pt">📊 Visualizations</span></div><div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap"><button class="btn" onclick="aiChart('bar')">📊 Bar</button><button class="btn" onclick="aiChart('pie')">🥧 Pie</button><button class="btn" onclick="aiChart('line')">📈 Line</button><button class="btn" onclick="aiChart('heatmap')">🔥 Heatmap</button><button class="btn" onclick="aiChart('scatter')">✨ Scatter</button><button class="btn" onclick="aiChart('box')">📦 Box</button></div><div id="ai-chart-container" style="min-height:400px"></div></div></div>
+    <div id="ai-tab-acc" style="display:none"><div class="panel"><div class="ph"><span class="pt">🎯 ML Accuracy Metrics</span></div><div class="kpi-row" id="ai-metrics"></div></div></div>
+    <div id="ai-tab-chat" style="display:none"><div class="chat-box"><div class="chat-msgs" id="ai-chat-msgs"><div class="msg ai"><div class="msg-content">👋 Hello! I'm your AI Data Analyst. Upload data and ask me anything!</div></div></div><div class="chat-input"><input type="text" id="ai-chat-input" placeholder="Ask about your data..." onkeypress="if(event.key==='Enter')aiSendChat()"/><button onclick="aiSendChat()">Send</button></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODULE 2: SMART ETL
+═══════════════════════════════════ -->
+<div class="module" id="mod-etl">
+  <div id="etl-upload" class="upload-wrap">
+    <div class="upload-hero"><div class="eyebrow">Automated ETL Pipeline</div><h1>Extract. Transform.<br/>Load & Analyze.</h1><p>Upload any CSV — auto-detect, clean, feature engineer, train ML models. Zero config.</p></div>
+    <div class="drop-zone" id="etl-dropzone"><span class="drop-icon">📂</span><h2>Drop your CSV here</h2><p>any size · any encoding · auto-detect</p><input type="file" id="etl-file-input" accept=".csv"/><div class="fmt-row"><span class="fmt-badge">CSV</span></div></div>
+    <div class="or-divider"><span>or try demo</span></div>
+    <button class="btn btn-primary" onclick="etlUpload(demoFile())" style="padding:12px 36px">⚡ Run Demo</button>
+    <div class="features-row"><div class="feat-chip"><div class="fi">🔍</div><p>Auto detect<br/>types</p></div><div class="feat-chip"><div class="fi">🧹</div><p>Smart clean<br/>& impute</p></div><div class="feat-chip"><div class="fi">🤖</div><p>Auto ML<br/>best model</p></div></div>
+  </div>
+  <div id="etl-loading" class="loading-wrap" style="display:none"><div class="ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#1e2d45" stroke-width="5"/><circle id="etl-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#rg1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="0 327" style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .6s"/></svg><div class="ring-center"><span class="ring-pct" id="etl-pct">0%</span><span class="ring-lbl">PROGRESS</span></div></div><div><div class="load-title">Running ETL Pipeline</div><div class="load-stage" id="etl-stage">Initializing...</div></div><div class="prog-bar"><div class="prog-fill" id="etl-bar" style="width:0%"></div></div></div>
+  <div id="etl-dash" class="dash" style="display:none">
+    <div class="dash-top"><div class="dash-title"><h2>⚡ ETL Dashboard</h2><p id="etl-subtitle">—</p></div><div style="display:flex;gap:8px"><button class="btn" onclick="showUpload('etl')">← New File</button><button class="btn btn-green" onclick="if(etlData)window.location='/etl/download/'+etlData._jobId">↓ Download CSV</button></div></div>
+    <div class="kpi-row" id="etl-kpis"></div>
+    <div class="g2">
+      <div class="panel"><div class="ph"><span class="pt">📊 Distribution</span><select id="etl-dist-sel" class="btn" style="font-size:9px;padding:4px 8px" onchange="etlRenderDist()"></select></div><div class="chart-wrap"><canvas id="etl-dist-chart"></canvas></div></div>
+      <div class="panel"><div class="ph"><span class="pt">⚙ Pipeline Log</span><span class="pb" id="etl-log-badge">—</span></div><div class="log-list" id="etl-log"></div></div>
+    </div>
+    <div class="g2">
+      <div class="panel"><div class="ph"><span class="pt">🏷 Category Breakdown</span><select id="etl-cat-sel" class="btn" style="font-size:9px;padding:4px 8px" onchange="etlRenderCat()"></select></div><div class="chart-wrap"><canvas id="etl-cat-chart"></canvas></div></div>
+      <div class="panel"><div class="ph"><span class="pt">📐 Column Statistics</span></div><div class="tbl-wrap"><table><thead><tr><th>Column</th><th>Min</th><th>Max</th><th>Mean</th><th>Median</th><th>Sum</th></tr></thead><tbody id="etl-stats-body"></tbody></table></div></div>
+    </div>
+    <div class="panel" id="etl-ml" style="display:none"><div class="ph"><span class="pt">🤖 Auto ML <span class="pb" id="etl-ml-badge"></span></span><span id="etl-ml-best" style="font-family:var(--mono);font-size:10px;color:var(--green)"></span></div><div class="g2"><div id="etl-model-rows"></div><div id="etl-fi"></div></div></div>
+    <div class="panel"><div class="ph"><span class="pt">🗃 Data Preview</span><span class="pb" id="etl-prev-badge">—</span></div><div class="tbl-wrap" id="etl-prev-wrap"></div><div class="pgn"><span class="pgn-info" id="etl-prev-info">—</span><div><button class="btn" onclick="etlPageChange(-1)">◀</button> <button class="btn" onclick="etlPageChange(1)">▶</button></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODULE 3: BI REPORTER
+═══════════════════════════════════ -->
+<div class="module" id="mod-bi">
+  <div id="bi-upload" class="upload-wrap">
+    <div class="upload-hero"><div class="eyebrow">Business Intelligence</div><h1>Raw Data Into<br/>Professional Reports.</h1><p>Upload CSV/Excel — get a formatted Excel report with KPIs, charts, ML predictions, and Power BI integration.</p></div>
+    <div class="drop-zone" id="bi-dropzone"><span class="drop-icon">📊</span><h2>Drop your file here</h2><p>CSV, XLSX, XLS · Up to 200MB</p><input type="file" id="bi-file-input" accept=".csv,.xlsx,.xls"/><div class="fmt-row"><span class="fmt-badge">CSV</span><span class="fmt-badge">XLSX</span><span class="fmt-badge">XLS</span></div></div>
+    <div class="or-divider"><span>or try demo</span></div>
+    <button class="btn btn-primary" onclick="biUpload(demoFile('demo_business.csv'))" style="padding:12px 36px">⚡ Generate Demo Report</button>
+    <div class="features-row"><div class="feat-chip"><div class="fi">🧹</div><p>Auto clean</p></div><div class="feat-chip"><div class="fi">📊</div><p>Excel report<br/>with charts</p></div><div class="feat-chip"><div class="fi">🤖</div><p>ML revenue<br/>prediction</p></div></div>
+  </div>
+  <div id="bi-loading" class="loading-wrap" style="display:none"><div class="ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#1e2d45" stroke-width="5"/><circle id="bi-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#rg1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="0 327" style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .6s"/></svg><div class="ring-center"><span class="ring-pct" id="bi-pct">0%</span><span class="ring-lbl">PROGRESS</span></div></div><div><div class="load-title">Generating BI Report</div><div class="load-stage" id="bi-stage">Initializing...</div></div><div class="prog-bar"><div class="prog-fill" id="bi-bar" style="width:0%"></div></div></div>
+  <div id="bi-dash" class="dash" style="display:none">
+    <div class="dash-top"><div class="dash-title"><h2>📊 BI Dashboard</h2><p id="bi-subtitle">—</p></div><div style="display:flex;gap:8px"><button class="btn" onclick="showUpload('bi')">← New File</button><button class="btn btn-green" id="bi-dl-btn">↓ Download Excel Report</button></div></div>
+    <div class="kpi-row" id="bi-kpis"></div>
+    <div class="g2">
+      <div class="panel"><div class="ph"><span class="pt">📊 Revenue by Category</span></div><div class="chart-wrap"><canvas id="bi-cat-chart"></canvas></div></div>
+      <div class="panel"><div class="ph"><span class="pt">⚙ Pipeline Log</span><span class="pb" id="bi-log-badge">—</span></div><div class="log-list" id="bi-log"></div></div>
+    </div>
+    <div class="g2">
+      <div class="panel"><div class="ph"><span class="pt">🤖 ML Prediction</span><span id="bi-ml-badge" style="font-family:var(--mono);font-size:10px;color:var(--green)"></span></div><div id="bi-ml-content"></div></div>
+      <div class="panel"><div class="ph"><span class="pt">📐 Statistics</span></div><div class="tbl-wrap"><table><thead><tr><th>Column</th><th>Min</th><th>Max</th><th>Mean</th><th>Sum</th></tr></thead><tbody id="bi-stats-body"></tbody></table></div></div>
+    </div>
+    <div class="pbi-box"><div class="pbi-icon">⚡</div><div><div class="pbi-title">Connect to Power BI in 3 steps</div><div class="pbi-steps">1. Download the Excel report above<br/>2. Open Power BI Desktop → Get Data → Excel Workbook<br/>3. Choose "Cleaned Data" sheet → Load → Build!</div></div></div>
+    <div class="panel"><div class="ph"><span class="pt">🗃 Data Preview</span><span class="pb" id="bi-prev-badge">—</span></div><div class="tbl-wrap" id="bi-prev-wrap"></div><div class="pgn"><span class="pgn-info" id="bi-prev-info">—</span><div><button class="btn" onclick="biPageChange(-1)">◀</button> <button class="btn" onclick="biPageChange(1)">▶</button></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODULE 4: SQL ANALYTICS
+═══════════════════════════════════ -->
+<div class="module" id="mod-sql">
+  <div id="sql-upload" class="upload-wrap">
+    <div class="upload-hero"><div class="eyebrow">SQL Analytics Engine</div><h1>CSV In.<br/>SQL Insights Out.</h1><p>Upload any CSV — auto-loads into SQLite, runs 15+ SQL queries (GROUP BY, CTEs, Window Functions), live SQL editor.</p></div>
+    <div class="drop-zone" id="sql-dropzone"><span class="drop-icon">🗄</span><h2>Drop your file here</h2><p>CSV, XLSX · auto-schema detection</p><input type="file" id="sql-file-input" accept=".csv,.xlsx,.xls"/><div class="fmt-row"><span class="fmt-badge">CSV</span><span class="fmt-badge">XLSX</span><span class="fmt-badge">XLS</span></div></div>
+    <div class="or-divider"><span>or try demo</span></div>
+    <button class="btn btn-primary" onclick="sqlUpload(demoFile())" style="padding:12px 36px">⚡ Run Demo Dataset</button>
+    <div class="features-row"><div class="feat-chip"><div class="fi">🔍</div><p>Auto schema<br/>detection</p></div><div class="feat-chip"><div class="fi">💻</div><p>15+ SQL<br/>queries</p></div><div class="feat-chip"><div class="fi">📤</div><p>Export<br/>.sql file</p></div></div>
+  </div>
+  <div id="sql-loading" class="loading-wrap" style="display:none"><div class="ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#1e2d45" stroke-width="5"/><circle id="sql-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#rg1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="0 327" style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .6s"/></svg><div class="ring-center"><span class="ring-pct" id="sql-pct">0%</span><span class="ring-lbl">PROGRESS</span></div></div><div><div class="load-title">Executing SQL Pipeline</div><div class="load-stage" id="sql-stage">Initializing...</div></div><div class="prog-bar"><div class="prog-fill" id="sql-bar" style="width:0%"></div></div></div>
+  <div id="sql-dash" class="dash" style="display:none">
+    <div class="dash-top"><div class="dash-title"><h2>🗄 SQL Analytics</h2><p id="sql-subtitle">—</p></div><div style="display:flex;gap:8px"><button class="btn" onclick="showUpload('sql')">← New File</button><button class="btn btn-green" onclick="sqlExport()">↓ Export .sql</button></div></div>
+    <div class="tabs" id="sql-nav">
+      <button class="tab active" onclick="sqlShowView('overview')">Overview</button>
+      <button class="tab" onclick="sqlShowView('queries')">SQL Queries</button>
+      <button class="tab" onclick="sqlShowView('charts')">Charts</button>
+      <button class="tab" onclick="sqlShowView('editor')">SQL Editor</button>
+      <button class="tab" onclick="sqlShowView('data')">Data Preview</button>
+    </div>
+    <!-- Overview -->
+    <div id="sql-view-overview">
+      <div class="kpi-row" id="sql-kpis"></div>
+      <div class="panel"><div class="ph"><span class="pt">⚙ Pipeline Log</span><span class="pb" id="sql-log-badge">—</span></div><div class="log-list" id="sql-log"></div></div>
+    </div>
+    <!-- Queries -->
+    <div id="sql-view-queries" style="display:none"><div class="panel"><div class="ph"><span class="pt">SQL Queries</span><span class="pb" id="sql-q-badge">—</span></div><div id="sql-query-list"></div></div></div>
+    <!-- Charts -->
+    <div id="sql-view-charts" style="display:none"><div class="g2"><div class="panel"><div class="ph"><span class="pt">📊 Revenue by Category</span></div><div class="chart-wrap"><canvas id="sql-cat-chart"></canvas></div></div><div class="panel"><div class="ph"><span class="pt">📈 Revenue Trend</span></div><div class="chart-wrap"><canvas id="sql-trend-chart"></canvas></div></div></div><div class="panel"><div class="ph"><span class="pt">📐 Column Stats</span></div><div class="tbl-wrap"><table><thead><tr><th>Column</th><th>Min</th><th>Max</th><th>Mean</th><th>Sum</th></tr></thead><tbody id="sql-stats-body"></tbody></table></div></div></div>
+    <!-- Editor -->
+    <div id="sql-view-editor" style="display:none"><div class="panel"><div class="ph"><span class="pt">💻 SQL Editor</span><span class="pb" id="sql-editor-table">—</span></div><textarea class="sql-editor" id="sql-editor-area" placeholder="SELECT * FROM table LIMIT 10;"></textarea><button class="sql-run-btn" onclick="sqlRunCustom()">▶ Execute</button><div id="sql-custom-result" style="margin-top:12px"></div></div></div>
+    <!-- Data Preview -->
+    <div id="sql-view-data" style="display:none"><div class="panel"><div class="ph"><span class="pt">🗃 Data Preview</span><span class="pb" id="sql-prev-badge">—</span></div><div class="tbl-wrap" id="sql-prev-wrap"></div><div class="pgn"><span class="pgn-info" id="sql-prev-info">—</span><div><button class="btn" onclick="sqlPageChange(-1)">◀</button> <button class="btn" onclick="sqlPageChange(1)">▶</button></div></div></div></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app-layout -->
+
+<script src="/static/app.js"></script>
+<script src="/static/modules_ai_etl.js"></script>
+<script src="/static/modules_bi_sql.js"></script>
+<script src="/static/ui_polish.js"></script>
+</body>
+</html>
